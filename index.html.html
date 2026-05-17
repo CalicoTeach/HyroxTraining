@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyrox Train — Your Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;
+  --surface:#161616;
+  --surface2:#1f1f1f;
+  --surface3:#2a2a2a;
+  --text:#f0eeea;
+  --text2:#999;
+  --text3:#555;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.14);
+  --accent:#E8FF00;
+  --accent2:#B85A00;
+  --red:#FF4444;
+  --green:#39D353;
+  --radius:14px;
+  --radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:2px}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:200;background:rgba(13,13,13,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:58px;}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);letter-spacing:.05em}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:1.5rem;flex-wrap:wrap}
+.nav-links a{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text2);text-decoration:none;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+@media(max-width:620px){.nav-links{display:none}}
+
+/* ── HERO ── */
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:5rem 2rem 4rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 80% 30%,rgba(232,255,0,.05) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 70%,rgba(184,90,0,.06) 0%,transparent 70%);}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%);}
+.hero-inner{max-width:900px;margin:0 auto;width:100%;position:relative}
+.hero-eye{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:1.5rem;}
+.hero-eye::before{content:'';width:24px;height:1px;background:var(--accent)}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(64px,12vw,110px);line-height:.9;color:var(--text);letter-spacing:.01em;margin-bottom:1.5rem;}
+.hero h1 em{color:var(--accent);font-style:normal}
+.hero-sub{font-size:16px;color:var(--text2);max-width:480px;line-height:1.7;margin-bottom:3rem}
+.hero-cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:4rem}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:14px 28px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .15s,box-shadow .15s;text-decoration:none;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,255,0,.2)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:13px 28px;border-radius:6px;border:1px solid var(--border2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-decoration:none;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:580px;flex-wrap:wrap;}
+.hstat{flex:1;min-width:100px;padding:1.25rem 1rem;text-align:center;border-right:1px solid var(--border);}
+.hstat:last-child{border-right:none}
+.hstat-val{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--text);letter-spacing:.02em;line-height:1;margin-bottom:4px;}
+.hstat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.hstat.live .hstat-val{color:var(--accent)}
+
+/* ── LAYOUT ── */
+.container{max-width:900px;margin:0 auto;padding:0 1.25rem 6rem}
+section{margin-bottom:3rem;scroll-margin-top:74px}
+.sec-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem}
+.sec-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.03em}
+.sec-title span{color:var(--accent)}
+.sec-sub{font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:.08em}
+hr.div{border:none;border-top:1px solid var(--border);margin:2.5rem 0}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;margin-bottom:1rem;}
+
+/* ── BUTTONS ── */
+.gen-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem}
+.gen-btn{padding:9px 22px;font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--border2);border-radius:5px;background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.gen-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.gen-btn:hover:not(.active){border-color:var(--text);color:var(--text)}
+
+/* ── FORM FIELDS ── */
+.profile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.field-wrap{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:500}
+.field-wrap input,.field-wrap select{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:10px 13px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;}
+.field-wrap input:focus,.field-wrap select:focus{border-color:var(--accent)}
+.field-wrap select option{background:var(--surface2)}
+
+/* ── SCHEDULE PICKER ── */
+.day-picker{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:1.25rem}
+.day-toggle{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.day-toggle input{display:none}
+.day-btn{width:100%;padding:10px 0;border-radius:var(--radius-sm);border:1px solid var(--border2);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);background:var(--surface2);text-align:center;cursor:pointer;transition:all .2s;user-select:none}
+.day-toggle input:checked + .day-btn{background:var(--accent);color:#000;border-color:var(--accent)}
+.session-grid{display:flex;flex-direction:column;gap:8px}
+.session-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.session-day-lbl{font-size:12px;color:var(--text);font-weight:500;width:36px;flex-shrink:0}
+.session-type-btns{display:flex;gap:6px;flex-wrap:wrap}
+.stype-btn{padding:5px 13px;font-size:11px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;letter-spacing:.04em}
+.stype-btn.active-run{background:rgba(232,255,0,.1);border-color:var(--accent);color:var(--accent)}
+.stype-btn.active-strength{background:rgba(184,90,0,.12);border-color:#FF8C42;color:#FF8C42}
+.stype-btn.active-hybrid{background:rgba(59,157,17,.1);border-color:#3B9D11;color:#5DCAA5}
+.stype-btn.active-rest{background:var(--surface3);border-color:var(--surface3);color:var(--text3)}
+.duration-select{padding:5px 10px;font-size:11px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;color:var(--text2);font-family:'DM Sans',sans-serif;outline:none}
+.schedule-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-top:1rem}
+.ssumm{background:var(--surface2);border-radius:var(--radius-sm);padding:10px 12px;border:1px solid var(--border);text-align:center}
+.ssumm-val{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);line-height:1;margin-bottom:2px}
+.ssumm-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+
+/* ── PROFILE SUMMARY ── */
+.profile-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-bottom:1rem}
+.pstat{background:var(--surface2);border-radius:var(--radius-sm);padding:14px 12px;border:1px solid var(--border);transition:border-color .2s;}
+.pstat:hover{border-color:var(--border2)}
+.pstat-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.03em;line-height:1;margin-bottom:4px}
+.pstat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+.pstat.hi .pstat-val{color:var(--accent)}
+
+/* ── ALERTS ── */
+.alert{border-radius:var(--radius-sm);padding:13px 16px;font-size:13px;line-height:1.55;margin-bottom:10px;display:flex;gap:10px;align-items:flex-start}
+.alert i{font-size:16px;margin-top:1px;flex-shrink:0}
+.alert-warn{background:rgba(255,160,0,.08);border:1px solid rgba(255,160,0,.2);color:#FAC775}
+.alert-info{background:rgba(57,211,83,.06);border:1px solid rgba(57,211,83,.15);color:#5DCAA5}
+
+/* ── COUNTDOWN ── */
+.countdown-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.countdown-section::before{content:'RACE DAY';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Bebas Neue',sans-serif;font-size:80px;color:rgba(255,255,255,.02);letter-spacing:.1em;white-space:nowrap;pointer-events:none;}
+.countdown-label{font-size:11px;text-transform:uppercase;letter-spacing:.15em;color:var(--text2);font-weight:500;margin-bottom:1rem;display:flex;align-items:center;gap:8px;}
+.countdown-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.countdown-date-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
+.countdown-date-row label{font-size:13px;color:var(--text2)}
+.countdown-date-row input[type=date]{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;}
+.countdown-date-row input[type=date]:focus{border-color:var(--accent)}
+.countdown-display{display:flex;gap:8px;flex-wrap:wrap}
+.cd-unit{flex:1;min-width:64px;background:var(--surface2);border-radius:var(--radius-sm);padding:1rem .5rem;text-align:center;border:1px solid var(--border);}
+.cd-val{font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--accent);line-height:1}
+.cd-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-top:4px}
+
+/* ── READINESS ── */
+.readiness-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.75rem;margin-bottom:1rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;}
+.readiness-ring{position:relative;width:100px;height:100px;flex-shrink:0}
+.readiness-ring svg{transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(--surface3);stroke-width:8}
+.ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.16,1,.3,1)}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring-val{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1}
+.ring-sub{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+.readiness-info h3{font-size:16px;font-weight:500;margin-bottom:6px}
+.readiness-info p{font-size:13px;color:var(--text2);line-height:1.6}
+.readiness-bars{margin-top:1rem;display:flex;flex-direction:column;gap:8px}
+.rbar-row{display:flex;align-items:center;gap:10px}
+.rbar-lbl{font-size:11px;color:var(--text2);width:80px;flex-shrink:0}
+.rbar-track{flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.16,1,.3,1)}
+.rbar-val{font-size:11px;color:var(--text2);width:28px;text-align:right;flex-shrink:0}
+
+/* ── STATIONS ── */
+.stations-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:8px;margin-bottom:1rem}
+.st-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.st-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.st-card.active{border-color:var(--accent);background:rgba(232,255,0,.04)}
+.st-num{font-family:'Bebas Neue',sans-serif;font-size:11px;color:var(--text3);margin-bottom:6px;letter-spacing:.1em}
+.st-card.active .st-num{color:var(--accent)}
+.st-icon{font-size:20px;color:var(--text2);margin-bottom:8px;display:block}
+.st-card.active .st-icon{color:var(--accent)}
+.st-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.st-dist{font-size:11px;color:var(--text2)}
+.st-badge{display:inline-block;font-size:10px;padding:3px 9px;border-radius:4px;margin-top:8px;font-weight:500;letter-spacing:.04em}
+.badge-hard{background:rgba(255,68,68,.12);color:#FF8080;border:1px solid rgba(255,68,68,.2)}
+.badge-med{background:rgba(250,199,117,.1);color:#FAC775;border:1px solid rgba(250,199,117,.2)}
+.badge-ok{background:rgba(57,211,83,.08);color:#5DCAA5;border:1px solid rgba(57,211,83,.15)}
+.detail-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;border-left:3px solid var(--accent);animation:slideIn .3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.detail-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.detail-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.03em}
+.detail-dist{font-size:12px;color:var(--text2);background:var(--surface2);padding:4px 12px;border-radius:20px;border:1px solid var(--border2);white-space:nowrap}
+.detail-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:1rem}
+.tip-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.tip-list li{font-size:13px;color:var(--text2);padding-left:18px;position:relative;line-height:1.55}
+.tip-list li::before{content:'→';position:absolute;left:0;color:var(--accent);font-size:12px;top:1px}
+
+/* ── WEEK PLAN ── */
+.phase-tabs{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.ptab{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;padding:8px 16px;border:1px solid var(--border2);border-radius:5px;background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.ptab.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.ptab:hover:not(.active){border-color:var(--text);color:var(--text)}
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+.day-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 4px;text-align:center;min-height:94px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all .2s;}
+.day-cell:hover{border-color:var(--border2);transform:translateY(-2px)}
+.day-cell.today{border-color:var(--accent)}
+.day-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3)}
+.day-dot{width:8px;height:8px;border-radius:50%;margin:3px auto}
+.day-dot.run{background:var(--accent);box-shadow:0 0 8px rgba(232,255,0,.4)}
+.day-dot.strength{background:#FF8C42;box-shadow:0 0 8px rgba(255,140,66,.4)}
+.day-dot.hybrid{background:#3B9D11;box-shadow:0 0 8px rgba(59,157,17,.4)}
+.day-dot.rest{background:var(--surface3)}
+.day-type{font-size:8px;color:var(--text3);line-height:1.4}
+.day-dur{font-size:8px;color:var(--accent2);opacity:.8}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--text2);margin-top:8px}
+.legend-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+
+/* ── PACE ── */
+.pace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:12px}
+.pace-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 12px;text-align:center;transition:border-color .2s;}
+.pace-card:hover{border-color:var(--border2)}
+.pace-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.04em;line-height:1;margin-bottom:5px}
+.pace-unit{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text2)}
+.pace-card.hi .pace-val{color:var(--accent)}
+.pace-note{font-size:12px;color:var(--text3);margin-top:6px;line-height:1.5}
+
+/* ── NUTRITION ── */
+.macro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1.25rem}
+.macro-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 14px;text-align:center;position:relative;overflow:hidden;}
+.macro-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.macro-card.carb::before{background:#E8FF00}
+.macro-card.prot::before{background:#FF8C42}
+.macro-card.fat::before{background:#5DCAA5}
+.macro-card.cal::before{background:var(--red)}
+.macro-val{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:.03em;line-height:1;margin-bottom:3px}
+.macro-unit{font-size:11px;color:var(--text2);margin-bottom:2px}
+.macro-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.macro-card.carb .macro-val{color:var(--accent)}
+.macro-card.prot .macro-val{color:#FF8C42}
+.macro-card.fat .macro-val{color:#5DCAA5}
+.macro-card.cal .macro-val{color:var(--red)}
+.meal-tabs{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.meal-tab{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;padding:7px 16px;border:1px solid var(--border2);border-radius:5px;background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.meal-tab.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.meal-tab:hover:not(.active){border-color:var(--text);color:var(--text)}
+.meal-plan-grid{display:flex;flex-direction:column;gap:10px}
+.meal-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;display:grid;grid-template-columns:80px 1fr auto;gap:12px;align-items:center;}
+.meal-time{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.meal-name{font-size:14px;font-weight:500}
+.meal-detail{font-size:12px;color:var(--text2);margin-top:2px}
+.meal-cals{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent2);letter-spacing:.04em;white-space:nowrap}
+.fuelling-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1rem}
+.fuel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.25rem;}
+.fuel-card h4{font-size:13px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.fuel-card h4 i{font-size:15px;color:var(--accent)}
+.fuel-card p{font-size:12px;color:var(--text2);line-height:1.6}
+.timing-bar{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:1rem}
+.timing-seg{flex:1;padding:10px 6px;text-align:center;font-size:10px;letter-spacing:.06em;text-transform:uppercase;border-right:1px solid var(--border);}
+.timing-seg:last-child{border-right:none}
+.timing-seg.pre{background:rgba(59,157,17,.08);color:#5DCAA5}
+.timing-seg.during{background:rgba(232,255,0,.06);color:var(--accent)}
+.timing-seg.post{background:rgba(255,140,66,.08);color:#FF8C42}
+.timing-seg strong{display:block;font-size:13px;font-weight:500;margin-bottom:2px}
+.hydration-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.hydro-badge{background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.hydro-badge i{font-size:13px;color:#5DCAA5}
+.supp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.supp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
+.supp-name{font-size:13px;font-weight:500;margin-bottom:4px}
+.supp-dose{font-size:11px;color:var(--accent2);margin-bottom:4px;font-weight:500}
+.supp-why{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* ── TIPS ── */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.5rem}
+.tip-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:all .2s;}
+.tip-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.tip-card i{font-size:22px;color:var(--text2);margin-bottom:10px;display:block}
+.tip-card h4{font-size:14px;font-weight:500;margin-bottom:6px}
+.tip-card p{font-size:13px;color:var(--text2);line-height:1.55}
+
+/* ── FOOTER ── */
+footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:2.5rem 2rem;font-size:12px;color:var(--text3);letter-spacing:.05em;}
+footer span{color:var(--accent)}
+
+/* ── ANIMATIONS ── */
+.fade-in{animation:fadeIn .5s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MOBILE ── */
+@media(max-width:600px){
+  .hero{padding:4rem 1.25rem 3rem;min-height:auto}
+  .hero h1{font-size:clamp(52px,14vw,80px)}
+  .hero-stats{flex-direction:column;gap:0;max-width:100%}
+  .hstat{border-right:none;border-bottom:1px solid var(--border);padding:1rem}
+  .hstat:last-child{border-bottom:none}
+  .week-grid{gap:3px}
+  .day-cell{min-height:82px;padding:8px 2px}
+  .day-type{font-size:7px}
+  .container{padding:0 1rem 4rem}
+  .readiness-wrap{grid-template-columns:1fr}
+  .readiness-ring{margin:0 auto}
+  .meal-item{grid-template-columns:1fr;gap:4px}
+  .day-picker{grid-template-columns:repeat(7,1fr)}
+  .day-btn{font-size:9px;padding:8px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hyrox <span>Train</span></div>
+  <div class="nav-links">
+    <a href="#profile">Profile</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#readiness">Readiness</a>
+    <a href="#stations">Stations</a>
+    <a href="#plan">Plan</a>
+    <a href="#pace">Pace</a>
+    <a href="#nutrition">Nutrition</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eye">Personalised Hyrox Training</div>
+    <h1>Train.<br>Race.<br><em>Win.</em></h1>
+    <p class="hero-sub">Enter your stats and weekly availability. Get a personalised training schedule, pace zones, station breakdowns, and a full nutrition plan — built around your life.</p>
+    <div class="hero-cta-row">
+      <a href="#profile" class="btn-primary"><i class="ti ti-user"></i> Build my plan</a>
+      <a href="#nutrition" class="btn-secondary"><i class="ti ti-salad"></i> See nutrition</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat live"><div class="hstat-val">8</div><div class="hstat-lbl">km run</div></div>
+      <div class="hstat"><div class="hstat-val">8</div><div class="hstat-lbl">Stations</div></div>
+      <div class="hstat"><div class="hstat-val">1km</div><div class="hstat-lbl">Per segment</div></div>
+      <div class="hstat"><div class="hstat-val">12wk</div><div class="hstat-lbl">Programme</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- COUNTDOWN -->
+  <section>
+    <div class="countdown-section">
+      <div class="countdown-label">Race day countdown</div>
+      <div class="countdown-date-row">
+        <label>Set your race date:</label>
+        <input type="date" id="raceDate" oninput="updateCountdown()">
+      </div>
+      <div class="countdown-display">
+        <div class="cd-unit"><div class="cd-val" id="cd-days">—</div><div class="cd-lbl">Days</div></div>
+        <div class="cd-unit"><div class="cd-val" id="cd-weeks">—</div><div class="cd-lbl">Weeks</div></div>
+        <div class="cd-unit"><div class="cd-val" id="cd-months">—</div><div class="cd-lbl">Months</div></div>
+        <div class="cd-unit"><div class="cd-val" id="cd-phase">—</div><div class="cd-lbl">Phase</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile">
+    <div class="sec-header">
+      <div class="sec-title">Your <span>profile</span></div>
+      <div class="sec-sub">All sections update live</div>
+    </div>
+    <div class="card">
+      <div class="field-label" style="margin-bottom:10px">Gender</div>
+      <div class="gen-btns">
+        <button class="gen-btn active" onclick="setGender('female',this)"><i class="ti ti-gender-female" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Female</button>
+        <button class="gen-btn" onclick="setGender('male',this)"><i class="ti ti-gender-male" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>Male</button>
+      </div>
+      <div class="profile-grid">
+        <div class="field-wrap"><span class="field-label">Age</span><input type="number" id="age" value="40" min="16" max="70" oninput="update()"></div>
+        <div class="field-wrap"><span class="field-label">Height (cm)</span><input type="number" id="height" value="155" min="140" max="220" oninput="update()"></div>
+        <div class="field-wrap"><span class="field-label">Weight (kg)</span><input type="number" id="weight" value="45" min="35" max="130" oninput="update()"></div>
+        <div class="field-wrap"><span class="field-label">5km run time</span><input type="text" id="run5k" value="28:00" placeholder="mm:ss" oninput="update()"></div>
+        <div class="field-wrap"><span class="field-label">Fitness level</span>
+          <select id="fitness" onchange="update()">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate" selected>Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </div>
+        <div class="field-wrap"><span class="field-label">Goal</span>
+          <select id="goal" onchange="update()">
+            <option value="finish">Finish strong</option>
+            <option value="sub90">Sub 90 min</option>
+            <option value="sub75">Sub 75 min</option>
+            <option value="compete">Podium</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div id="profileOut"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- SCHEDULE CUSTOMISER -->
+  <section id="schedule">
+    <div class="sec-header">
+      <div class="sec-title">Your <span>schedule</span></div>
+      <div class="sec-sub">Tell us your availability</div>
+    </div>
+    <div class="card">
+      <div class="field-label" style="margin-bottom:12px">Which days can you train?</div>
+      <div class="day-picker">
+        <label class="day-toggle"><input type="checkbox" id="d-mon" onchange="buildSessionRows()"><div class="day-btn">Mon</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-tue" onchange="buildSessionRows()"><div class="day-btn">Tue</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-wed" onchange="buildSessionRows()" checked><div class="day-btn">Wed</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-thu" onchange="buildSessionRows()"><div class="day-btn">Thu</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-fri" onchange="buildSessionRows()" checked><div class="day-btn">Fri</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-sat" onchange="buildSessionRows()" checked><div class="day-btn">Sat</div></label>
+        <label class="day-toggle"><input type="checkbox" id="d-sun" onchange="buildSessionRows()" checked><div class="day-btn">Sun</div></label>
+      </div>
+      <div class="field-label" style="margin-bottom:10px">Assign session types to each day</div>
+      <div class="session-grid" id="sessionRows"></div>
+      <div class="schedule-summary" id="scheduleSummary"></div>
+    </div>
+    <div id="scheduleWarning"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- READINESS -->
+  <section id="readiness">
+    <div class="sec-header">
+      <div class="sec-title">Race <span>readiness</span></div>
+      <div class="sec-sub">Based on your profile</div>
+    </div>
+    <div id="readinessOut"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- STATIONS -->
+  <section id="stations">
+    <div class="sec-header">
+      <div class="sec-title">The <span>8 stations</span></div>
+      <div class="sec-sub" id="stationsSub">Tap any station</div>
+    </div>
+    <div class="stations-grid" id="stationsGrid"></div>
+    <div id="stationDetail"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- PERSONALISED WEEK PLAN -->
+  <section id="plan">
+    <div class="sec-header">
+      <div class="sec-title">Your <span>weekly plan</span></div>
+      <div class="sec-sub" id="planSub"></div>
+    </div>
+    <div class="phase-tabs">
+      <button class="ptab active" onclick="setPhase('base',this)">Base — wk 1–4</button>
+      <button class="ptab" onclick="setPhase('build',this)">Build — wk 5–8</button>
+      <button class="ptab" onclick="setPhase('peak',this)">Peak — wk 9–12</button>
+    </div>
+    <div id="planOut"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- PACE -->
+  <section id="pace">
+    <div class="sec-header">
+      <div class="sec-title">Pace <span>zones</span></div>
+      <div class="sec-sub">Age-graded for you</div>
+    </div>
+    <div id="paceOut"></div>
+  </section>
+
+  <hr class="div">
+
+  <!-- NUTRITION -->
+  <section id="nutrition">
+    <div class="sec-header">
+      <div class="sec-title">Nutrition <span>plan</span></div>
+      <div class="sec-sub" id="nutritionSub">Personalised for your stats</div>
+    </div>
+
+    <!-- Macro targets -->
+    <div class="field-label" style="margin-bottom:10px">Daily macro targets</div>
+    <div class="macro-grid" id="macroGrid"></div>
+
+    <!-- Meal timing bar -->
+    <div class="field-label" style="margin-bottom:10px">Race day timing</div>
+    <div class="timing-bar">
+      <div class="timing-seg pre"><strong>3–4 hrs before</strong>Carb-rich meal</div>
+      <div class="timing-seg pre"><strong>60 min before</strong>Light snack</div>
+      <div class="timing-seg during"><strong>During race</strong>Gels / chews</div>
+      <div class="timing-seg post"><strong>Within 30 min</strong>Recovery shake</div>
+      <div class="timing-seg post"><strong>2 hrs after</strong>Full meal</div>
+    </div>
+
+    <!-- Meal plan tabs -->
+    <div class="field-label" style="margin-bottom:10px">Meal plan</div>
+    <div class="meal-tabs">
+      <button class="meal-tab active" onclick="setMealDay('training',this)">Training day</button>
+      <button class="meal-tab" onclick="setMealDay('rest',this)">Rest day</button>
+      <button class="meal-tab" onclick="setMealDay('race',this)">Race day</button>
+    </div>
+    <div class="meal-plan-grid" id="mealPlan"></div>
+
+    <hr class="div" style="margin:1.5rem 0">
+
+    <!-- Race fuelling -->
+    <div class="field-label" style="margin-bottom:10px">Race day fuelling strategy</div>
+    <div class="fuelling-grid" id="fuellingGrid"></div>
+
+    <hr class="div" style="margin:1.5rem 0">
+
+    <!-- Hydration -->
+    <div class="field-label" style="margin-bottom:10px">Hydration targets</div>
+    <div class="hydration-row" id="hydrationRow"></div>
+
+    <hr class="div" style="margin:1.5rem 0">
+
+    <!-- Supplements -->
+    <div class="field-label" style="margin-bottom:10px">Evidence-based supplements</div>
+    <div class="supp-grid">
+      <div class="supp-card"><div class="supp-name">Creatine Monohydrate</div><div class="supp-dose">3–5 g daily</div><div class="supp-why">Improves high-intensity power output. Essential for sled push and wall balls.</div></div>
+      <div class="supp-card"><div class="supp-name">Beta-Alanine</div><div class="supp-dose">3.2–6.4 g daily</div><div class="supp-why">Buffers lactic acid. Helps maintain station performance late in the race.</div></div>
+      <div class="supp-card"><div class="supp-name">Caffeine</div><div class="supp-dose">3–6 mg/kg, 45 min pre-race</div><div class="supp-why">Proven aerobic and strength enhancer. Don't try new doses on race day.</div></div>
+      <div class="supp-card"><div class="supp-name">Whey Protein</div><div class="supp-dose">25–30 g post-session</div><div class="supp-why">Accelerates muscle repair. Critical for Masters athletes with slower recovery.</div></div>
+      <div class="supp-card"><div class="supp-name">Magnesium</div><div class="supp-dose">300–400 mg nightly</div><div class="supp-why">Supports sleep quality and muscle relaxation — often depleted in heavy training.</div></div>
+      <div class="supp-card"><div class="supp-name">Vitamin D3</div><div class="supp-dose">1000–2000 IU daily</div><div class="supp-why">Supports bone density, immune function, and muscle performance.</div></div>
+    </div>
+  </section>
+
+  <hr class="div">
+
+  <!-- TIPS -->
+  <section>
+    <div class="sec-header"><div class="sec-title">Key <span>principles</span></div></div>
+    <div id="tipsOut"></div>
+  </section>
+
+</div>
+
+<footer>Built for <span>Hyrox</span> athletes everywhere &nbsp;·&nbsp; Adapt. Train. Race.</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let gender = 'female';
+let activeStation = 0;
+let activePhase = 'base';
+let activeMealDay = 'training';
+let cachedStations = [];
+
+// Session assignments: day -> type
+const dayKeys = ['mon','tue','wed','thu','fri','sat','sun'];
+const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const sessionTypes = ['run','strength','hybrid','rest'];
+const sessionLabels = {run:'Run',strength:'Strength',hybrid:'Hybrid',rest:'Rest'};
+const sessionAssignments = {mon:'rest',tue:'rest',wed:'run',thu:'rest',fri:'strength',sat:'hybrid',sun:'run'};
+const sessionDurations = {mon:45,tue:45,wed:45,thu:45,fri:60,sat:75,sun:60};
+
+/* ═══════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════ */
+function setGender(g,btn){gender=g;document.querySelectorAll('.gen-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');update();}
+function setPhase(p,btn){activePhase=p;document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPlan();}
+function setMealDay(d,btn){activeMealDay=d;document.querySelectorAll('.meal-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderMeals();}
+function parse5k(str){const p=(str||'28:00').split(':');if(p.length===2)return(parseInt(p[0])||0)+(parseInt(p[1])||0)/60;return parseFloat(str)||28;}
+function getBMI(w,h){return(w/((h/100)**2)).toFixed(1);}
+function getSleds(w,g){const sp=g==='female'?102:152,sl=g==='female'?78:103;return{sledPush:sp,sledPull:sl,rPush:Math.round(sp/w*100),rPull:Math.round(sl/w*100)};}
+function fmtPace(min){const m=Math.floor(min),s=Math.round((min-m)*60);return`${m}:${s.toString().padStart(2,'0')}`;}
+function difficulty(r){if(r>220)return{lbl:'Challenging',cls:'badge-hard'};if(r>170)return{lbl:'Moderate',cls:'badge-med'};return{lbl:'Manageable',cls:'badge-ok'};}
+function getActiveDays(){return dayKeys.filter(d=>document.getElementById('d-'+d)&&document.getElementById('d-'+d).checked);}
+
+/* ═══════════════════════════════════════════
+   COUNTDOWN
+═══════════════════════════════════════════ */
+function updateCountdown(){
+  const val=document.getElementById('raceDate').value;
+  if(!val)return;
+  const race=new Date(val),now=new Date(),diff=race-now;
+  if(diff<=0){document.getElementById('cd-days').textContent='🏁';document.getElementById('cd-weeks').textContent='0';document.getElementById('cd-months').textContent='0';document.getElementById('cd-phase').textContent='RACE';return;}
+  const days=Math.floor(diff/864e5),weeks=Math.floor(days/7),months=Math.floor(days/30.4);
+  let phase='—';
+  if(weeks>=9)phase='Base';else if(weeks>=5)phase='Build';else if(weeks>=1)phase='Peak';else phase='Taper';
+  document.getElementById('cd-days').textContent=days;
+  document.getElementById('cd-weeks').textContent=weeks;
+  document.getElementById('cd-months').textContent=months;
+  document.getElementById('cd-phase').textContent=phase;
+}
+const dr=new Date();dr.setDate(dr.getDate()+84);
+document.getElementById('raceDate').value=dr.toISOString().split('T')[0];
+updateCountdown();
+
+/* ═══════════════════════════════════════════
+   SCHEDULE BUILDER
+═══════════════════════════════════════════ */
+function buildSessionRows(){
+  const active=getActiveDays();
+  const rows=document.getElementById('sessionRows');
+  if(active.length===0){rows.innerHTML='<p style="font-size:13px;color:var(--text3);padding:8px 0">Select at least one training day above.</p>';renderScheduleSummary(active);renderPlan();return;}
+
+  rows.innerHTML=active.map(d=>{
+    const cur=sessionAssignments[d]||'run';
+    const dur=sessionDurations[d]||45;
+    return`<div class="session-row">
+      <div class="session-day-lbl">${dayNames[dayKeys.indexOf(d)]}</div>
+      <div class="session-type-btns">
+        ${sessionTypes.map(t=>`<button class="stype-btn ${cur===t?'active-'+t:''}" onclick="setSessionType('${d}','${t}',this)">${sessionLabels[t]}</button>`).join('')}
+      </div>
+      <select class="duration-select" onchange="setSessionDur('${d}',this.value)">
+        ${[30,45,60,75,90,120].map(m=>`<option value="${m}" ${dur===m?'selected':''}>${m} min</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('');
+
+  renderScheduleSummary(active);
+  renderPlan();
+}
+
+function setSessionType(day,type,btn){
+  sessionAssignments[day]=type;
+  const row=btn.closest('.session-row');
+  row.querySelectorAll('.stype-btn').forEach(b=>{b.className='stype-btn';});
+  btn.classList.add('active-'+type);
+  renderScheduleSummary(getActiveDays());
+  renderPlan();
+}
+function setSessionDur(day,val){sessionDurations[day]=parseInt(val);renderScheduleSummary(getActiveDays());renderPlan();}
+
+function renderScheduleSummary(active){
+  const counts={run:0,strength:0,hybrid:0,rest:0};
+  let totalMins=0;
+  active.forEach(d=>{
+    const t=sessionAssignments[d]||'run';
+    counts[t]=(counts[t]||0)+1;
+    if(t!=='rest')totalMins+=sessionDurations[d]||45;
+  });
+  document.getElementById('scheduleSummary').innerHTML=`
+    <div class="ssumm"><div class="ssumm-val">${active.length}</div><div class="ssumm-lbl">Training days</div></div>
+    <div class="ssumm"><div class="ssumm-val">${counts.run||0}</div><div class="ssumm-lbl">Run sessions</div></div>
+    <div class="ssumm"><div class="ssumm-val">${counts.strength||0}</div><div class="ssumm-lbl">Strength</div></div>
+    <div class="ssumm"><div class="ssumm-val">${counts.hybrid||0}</div><div class="ssumm-lbl">Hybrid</div></div>
+    <div class="ssumm"><div class="ssumm-val">${Math.round(totalMins/60*10)/10}h</div><div class="ssumm-lbl">Weekly volume</div></div>
+  `;
+  const warn=document.getElementById('scheduleWarning');
+  const total=active.length;
+  if(total<3){warn.innerHTML=`<div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>You've selected fewer than 3 training days. Hyrox preparation works best with at least 3–4 sessions per week. Consider adding more days if your schedule allows.</span></div>`;}
+  else if((counts.run||0)<1){warn.innerHTML=`<div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>No run sessions scheduled. Running makes up 8 km of the race — include at least 1–2 dedicated run sessions per week.</span></div>`;}
+  else{warn.innerHTML='';}
+}
+
+/* ═══════════════════════════════════════════
+   STATIONS
+═══════════════════════════════════════════ */
+function getStations(w,g,h){
+  const s=getSleds(w,g);
+  const short=h<163;
+  const wball=g==='female'?'4 kg':'6 kg';
+  const sbag=g==='female'?'10 kg':'20 kg';
+  const farm=g==='female'?'2 × 16 kg':'2 × 24 kg';
+  const wreps=g==='female'?'75 reps':'100 reps';
+  const wtgt=g==='female'?'9 ft':'10 ft';
+  return[
+    {name:'SkiErg',dist:'1,000 m',icon:'ti-arrow-up',diff:{lbl:'Aerobic',cls:'badge-med'},
+     desc:`Full-body pull on the Concept2 SkiErg. At ${w} kg your lighter load is an advantage. Pacing is critical — many athletes blow up in the first 200 m.`,
+     tips:['Target stroke rate: 28–32 spm at steady state',short?'Your height means a shorter pull — compensate with powerful hip drive':'Use full arm extension for maximum power per stroke','Key session: 5 × 200 m at race pace with 90 s rest']},
+    {name:'Sled Push',dist:'50 m × 4',icon:'ti-trending-up',diff:difficulty(s.rPush),
+     desc:`${g==='female'?"Women's":"Men's"} Open sled is ${s.sledPush} kg — ${s.rPush}% of your bodyweight. ${s.rPush>200?'This is a serious challenge. Targeted leg strength is non-negotiable.':'Manageable with good technique and consistent leg work.'}`,
+     tips:['Keep hips low, drive explosively from glutes and quads',`At ${s.rPush}% BW: heavy leg press, Bulgarian split squats, and loaded sled work weekly`,'Short powerful steps — overstriding kills momentum']},
+    {name:'Sled Pull',dist:'50 m × 4',icon:'ti-trending-down',diff:difficulty(s.rPull),
+     desc:`${g==='female'?"Women's":"Men's"} Open sled pull is ${s.sledPull} kg — ${s.rPull}% of bodyweight. Posterior chain endurance decides this station.`,
+     tips:['Lean back into the harness, long controlled steps','Train: Romanian deadlifts, reverse sled drags, heavy glute bridges','Break into 2 sets of 2 if needed — rest at each turn']},
+    {name:'Burpee Broad Jumps',dist:'80 m',icon:'ti-bounce-right',diff:{lbl:short?'Efficient':'Moderate',cls:short?'badge-ok':'badge-med'},
+     desc:short?`At ${h} cm, your compact frame means less range of motion per burpee — a real efficiency edge. Use rhythm over raw speed.`:`80 m of alternating burpees and broad jumps arriving mid-race when fatigue is building.`,
+     tips:[short?'Compact stance = less ground time — use the rhythm advantage':'Chest fully to floor every rep or risk a no-rep','Find your sustainable pace in the first 20 m and hold it','Train: burpee + broad jump combos, plyometric box jumps']},
+    {name:'Rowing',dist:'1,000 m',icon:'ti-arrows-left-right',diff:{lbl:'Aerobic',cls:'badge-med'},
+     desc:`Concept2 ergometer for 1,000 m. The single strongest predictor of overall Hyrox performance. Lighter athletes often shine here.`,
+     tips:['Drive: legs 60%, back 20%, arms 20% — always in sequence','Target 500 m split 10–15 s slower than your open 500 m PB','Always row immediately after a run to simulate race fatigue']},
+    {name:'Farmers Carry',dist:'200 m',icon:'ti-briefcase',diff:{lbl:'Grip test',cls:'badge-med'},
+     desc:`Load: ${farm} for 200 m. Grip endurance and core stability are the limiting factors — not raw strength.`,
+     tips:["Don't death-grip — slightly open fingers prevent forearm pump",'Tall posture: resist letting the weight pull your shoulders forward','Build grip: loaded carries, dead hangs, towel pull-ups']},
+    {name:'Sandbag Lunges',dist:'100 m',icon:'ti-walk',diff:{lbl:'Quad burner',cls:'badge-hard'},
+     desc:`${sbag} sandbag on the shoulder, alternating lunges for 100 m. Arrives late in the race — quad endurance built in training is everything.`,
+     tips:['Full knee to floor every rep — judges no-rep anything sloppy','Switch shoulders every 25 m to distribute the load','Train weighted lunges twice per week — this station rewards specificity']},
+    {name:'Wall Balls',dist:wreps,icon:'ti-circle',diff:{lbl:'Final push',cls:'badge-hard'},
+     desc:`${wball} ball, squat-to-throw to a ${wtgt} target, ${wreps}. The last station — leave everything here.`,
+     tips:[short?`The ${wtgt} target needs full extension — drive hard through the legs for height`:'Use full height extension — your reach makes hitting the target easier','Break into sets of 15–20 early rather than grinding to failure',`Train at race weight (${wball}): thrusters, goblet squats, wall ball sets`]},
+  ];
+}
+
+/* ═══════════════════════════════════════════
+   PACE
+═══════════════════════════════════════════ */
+function getPaceZones(run5kMin,age){
+  let factor=1.0;
+  if(age>=35)factor+=(age-35)*0.004;
+  if(age>=50)factor+=(age-50)*0.006;
+  const ag=run5kMin*factor,km=ag/5;
+  const easy=km*1.25,tempo=km*1.05,race=km*1.12;
+  const runMins=Math.round(race*8),total=runMins+40;
+  const h=Math.floor(total/60),m=total%60;
+  let band='Sub 150';
+  if(total<=60)band='Sub 60';else if(total<=75)band='Sub 75';else if(total<=90)band='Sub 90';else if(total<=120)band='Sub 120';
+  return{easy:fmtPace(easy),tempo:fmtPace(tempo),race:fmtPace(race),total:`${h}:${m.toString().padStart(2,'0')}`,band,totalMins:total};
+}
+
+/* ═══════════════════════════════════════════
+   READINESS
+═══════════════════════════════════════════ */
+function getReadiness(w,h,age,run5kMin,fitness){
+  const sleds=getSleds(w,gender);
+  const aerobic=Math.max(20,Math.min(100,Math.round((35-run5kMin)/20*80+20)));
+  const strength=Math.max(20,Math.min(100,Math.round((250-sleds.rPush)/150*80+20)));
+  const recovery=Math.max(30,Math.min(95,Math.round(100-(age-20)*0.8)));
+  const bonus=fitness==='advanced'?10:fitness==='intermediate'?5:0;
+  const overall=Math.min(99,Math.round((aerobic*.4+strength*.35+recovery*.25)+bonus));
+  const color=overall>=75?'#39D353':overall>=50?'#E8FF00':'#FF8080';
+  const label=overall>=75?'Race ready':overall>=50?'On track':'Needs work';
+  const desc=overall>=75?'Your profile suggests you\'re well placed to compete. Focus on race-specific sessions and nailing your pacing strategy.'
+    :overall>=50?'Good foundation. Target your weakest station and add one extra hybrid session per week to close the gap.'
+    :'Start conservative — build your aerobic base first, then introduce station-specific work from week 5 onwards.';
+  return{aerobic,strength,recovery,overall,color,label,desc};
+}
+
+/* ═══════════════════════════════════════════
+   NUTRITION CALCULATIONS
+═══════════════════════════════════════════ */
+function getNutrition(w,h,age,g,fitness,goal){
+  // BMR (Mifflin-St Jeor)
+  const bmr=g==='female'?(10*w)+(6.25*h)-(5*age)-161:(10*w)+(6.25*h)-(5*age)+5;
+  const actMult=fitness==='advanced'?1.725:fitness==='intermediate'?1.55:1.375;
+  const tdee=Math.round(bmr*actMult);
+  // Goal adjustment
+  const goalAdj=goal==='finish'?0:goal==='sub90'?100:goal==='sub75'?150:200;
+  const targetCals=tdee+goalAdj;
+  // Macro split for endurance+strength hybrid
+  const protG=Math.round(w*(fitness==='advanced'?2.0:1.8)); // g per kg BW
+  const fatG=Math.round(targetCals*0.25/9);
+  const carbG=Math.round((targetCals-(protG*4)-(fatG*9))/4);
+  // Race day fuelling
+  const carbsPerHr=Math.round(w<60?35:w<80?45:55);
+  const cafDose=Math.round(w*4); // mg
+  return{bmr:Math.round(bmr),tdee,targetCals,protG,fatG,carbG,carbsPerHr,cafDose};
+}
+
+/* ═══════════════════════════════════════════
+   MEAL PLANS
+═══════════════════════════════════════════ */
+function getMeals(w,g,fitness,dayType,cals){
+  const hi=cals>2200;
+  const plans={
+    training:{
+      pre:`${hi?'Large':'Medium'} oat bowl`,
+      meals:[
+        {time:'6:30 AM',name:'Pre-workout oats',detail:`${hi?80:60}g oats, banana, honey, pinch of salt — eat 90 min before session`,cals:Math.round(cals*.18)},
+        {time:'9:00 AM',name:'Post-workout recovery',detail:`Whey protein shake (${hi?30:25}g protein), 250ml milk, mixed berries`,cals:Math.round(cals*.12)},
+        {time:'12:30 PM',name:'Lunch — rice bowl',detail:`${hi?180:140}g cooked rice, ${hi?180:150}g chicken or tofu, roasted veg, olive oil drizzle`,cals:Math.round(cals*.28)},
+        {time:'3:30 PM',name:'Afternoon snack',detail:'Greek yoghurt, handful of almonds, apple',cals:Math.round(cals*.1)},
+        {time:'7:00 PM',name:'Dinner',detail:`${hi?220:180}g salmon or lean beef, sweet potato ${hi?200:150}g, green beans`,cals:Math.round(cals*.27)},
+        {time:'9:00 PM',name:'Optional protein snack',detail:'Cottage cheese or casein shake — supports overnight muscle repair',cals:Math.round(cals*.05)},
+      ]
+    },
+    rest:{
+      meals:[
+        {time:'8:00 AM',name:'Breakfast',detail:'2–3 eggs scrambled, wholegrain toast, avocado, black coffee',cals:Math.round(cals*.22)},
+        {time:'12:00 PM',name:'Lunch',detail:`Salad with ${hi?160:130}g chicken, quinoa ${hi?100:80}g, cucumber, olive oil, lemon`,cals:Math.round(cals*.30)},
+        {time:'3:30 PM',name:'Snack',detail:'Small handful nuts, piece of fruit',cals:Math.round(cals*.08)},
+        {time:'7:00 PM',name:'Dinner',detail:`Stir-fry: ${hi?200:160}g tofu or beef, mixed veg, ${hi?160:120}g brown rice`,cals:Math.round(cals*.35)},
+        {time:'9:00 PM',name:'Herbal tea',detail:'Chamomile or magnesium tea — supports sleep and recovery',cals:5},
+      ]
+    },
+    race:{
+      meals:[
+        {time:'3 hrs before',name:'Pre-race meal',detail:'Oats with banana and honey (no fibre bombs), 500ml water + electrolytes',cals:Math.round(cals*.20)},
+        {time:'60 min before',name:'Light snack',detail:'Energy bar or banana + caffeine gel if used to it',cals:200},
+        {time:'During race',name:'Gels / chews',detail:`1 gel every 20–25 min during race. Target ${g==='female'?35:45}–${g==='female'?45:55}g carbs/hr`,cals:Math.round(cals*.08)},
+        {time:'Finish line',name:'Immediate recovery',detail:'Chocolate milk or recovery shake (4:1 carb:protein ratio) within 30 min',cals:Math.round(cals*.12)},
+        {time:'2 hrs post',name:'Full recovery meal',detail:'Rice, protein (chicken, fish, or eggs), colourful vegetables',cals:Math.round(cals*.25)},
+      ]
+    }
+  };
+  return plans[dayType]?.meals||plans.training.meals;
+}
+
+/* ═══════════════════════════════════════════
+   WEEK PLAN — SCHEDULE AWARE
+═══════════════════════════════════════════ */
+const phaseDesc={
+  base:'Build your aerobic engine and introduce station movements. Volume is moderate, intensity is low.',
+  build:'Increase race-specific work. Hybrid sessions grow. Begin simulating race transitions.',
+  peak:'Sharpen fitness and practice race pace. Volume drops, quality and specificity rise.'
+};
+
+function renderPlan(){
+  const fitness=document.getElementById('fitness').value;
+  const age=parseInt(document.getElementById('age').value)||40;
+  const activeDays=getActiveDays();
+
+  // Build 7-day display from user schedule
+  const planCells=dayKeys.map(d=>{
+    const isActive=activeDays.includes(d);
+    if(!isActive)return{type:'rest',label:'Rest',dur:null,active:false};
+    const type=sessionAssignments[d]||'run';
+    const dur=sessionDurations[d]||45;
+    // Adjust label by phase
+    let label=sessionLabels[type];
+    if(type==='run'){
+      if(activePhase==='base')label=dur>=60?'Long run':'Easy run';
+      else if(activePhase==='build')label=dur>=60?'Tempo/intervals':'Easy run';
+      else label=dur>=60?'Race pace':'Strides';
+    }
+    if(type==='strength'){
+      if(activePhase==='base')label='Lower body';
+      else if(activePhase==='build')label='Full body';
+      else label='Activation';
+    }
+    if(type==='hybrid'){
+      if(activePhase==='base')label='Stations + run';
+      else if(activePhase==='build')label='Race sim';
+      else label='Full race sim';
+    }
+    return{type,label,dur,active:true};
+  });
+
+  document.getElementById('planSub').textContent=phaseDesc[activePhase];
+  document.getElementById('planOut').innerHTML=`
+    <div class="week-grid">
+      ${planCells.map((d,i)=>`
+        <div class="day-cell">
+          <div class="day-lbl">${dayNames[i]}</div>
+          <div class="day-dot ${d.type}"></div>
+          <div class="day-type">${d.label}</div>
+          ${d.dur?`<div class="day-dur">${d.dur}m</div>`:''}
+        </div>
+      `).join('')}
+    </div>
+    <div class="legend">
+      <span><span class="legend-dot" style="background:var(--accent)"></span>Running</span>
+      <span><span class="legend-dot" style="background:#FF8C42"></span>Strength</span>
+      <span><span class="legend-dot" style="background:#3B9D11"></span>Hybrid</span>
+      <span><span class="legend-dot" style="background:var(--surface3)"></span>Rest</span>
+    </div>
+    ${age>=40?`<p style="font-size:12px;color:var(--text3);margin-top:8px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Masters 40+ plan: schedule a full deload week (40% volume cut) every 4th week — your body adapts during rest, not just during training.</p>`:''}
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   RENDER STATIONS
+═══════════════════════════════════════════ */
+function renderStations(){
+  document.getElementById('stationsGrid').innerHTML=cachedStations.map((s,i)=>`
+    <div class="st-card ${i===activeStation?'active':''}" onclick="selectStation(${i})">
+      <div class="st-num">0${i+1}</div>
+      <div class="st-icon"><i class="ti ${s.icon}"></i></div>
+      <div class="st-name">${s.name}</div>
+      <div class="st-dist">${s.dist}</div>
+      <span class="st-badge ${s.diff.cls}">${s.diff.lbl}</span>
+    </div>
+  `).join('');
+  document.getElementById('stationsSub').textContent=`${activeStation+1} of 8 — ${cachedStations[activeStation].name}`;
+  const s=cachedStations[activeStation];
+  document.getElementById('stationDetail').innerHTML=`
+    <div class="detail-panel">
+      <div class="detail-top">
+        <div class="detail-title">${s.name}</div>
+        <div class="detail-dist">${s.dist}</div>
+      </div>
+      <div class="detail-desc">${s.desc}</div>
+      <ul class="tip-list">${s.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+function selectStation(i){activeStation=i;renderStations();}
+
+/* ═══════════════════════════════════════════
+   RENDER READINESS
+═══════════════════════════════════════════ */
+function renderReadiness(w,h,age,run5kMin,fitness){
+  const r=getReadiness(w,h,age,run5kMin,fitness);
+  const circ=2*Math.PI*40,offset=circ*(1-r.overall/100);
+  document.getElementById('readinessOut').innerHTML=`
+    <div class="readiness-wrap fade-in">
+      <div>
+        <div class="readiness-ring">
+          <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle class="ring-bg" cx="50" cy="50" r="40"/>
+            <circle class="ring-fill" cx="50" cy="50" r="40" stroke="${r.color}" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}"/>
+          </svg>
+          <div class="ring-label"><div class="ring-val" style="color:${r.color}">${r.overall}</div><div class="ring-sub">/ 100</div></div>
+        </div>
+      </div>
+      <div class="readiness-info">
+        <h3>${r.label}</h3>
+        <p>${r.desc}</p>
+        <div class="readiness-bars">
+          <div class="rbar-row"><div class="rbar-lbl">Aerobic</div><div class="rbar-track"><div class="rbar-fill" style="width:${r.aerobic}%;background:#E8FF00"></div></div><div class="rbar-val">${r.aerobic}</div></div>
+          <div class="rbar-row"><div class="rbar-lbl">Strength</div><div class="rbar-track"><div class="rbar-fill" style="width:${r.strength}%;background:#FF8C42"></div></div><div class="rbar-val">${r.strength}</div></div>
+          <div class="rbar-row"><div class="rbar-lbl">Recovery</div><div class="rbar-track"><div class="rbar-fill" style="width:${r.recovery}%;background:#5DCAA5"></div></div><div class="rbar-val">${r.recovery}</div></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   RENDER PACE
+═══════════════════════════════════════════ */
+function renderPace(pz){
+  document.getElementById('paceOut').innerHTML=`
+    <div class="pace-grid">
+      <div class="pace-card"><div class="pace-val">${pz.easy}</div><div class="pace-unit">Easy /km</div></div>
+      <div class="pace-card"><div class="pace-val">${pz.tempo}</div><div class="pace-unit">Tempo /km</div></div>
+      <div class="pace-card hi"><div class="pace-val">${pz.race}</div><div class="pace-unit">Race target /km</div></div>
+      <div class="pace-card hi"><div class="pace-val">${pz.total}</div><div class="pace-unit">Est. finish time</div></div>
+      <div class="pace-card"><div class="pace-val">${pz.band}</div><div class="pace-unit">Finish band</div></div>
+    </div>
+    <p class="pace-note">All zones are age-graded. Your race target accounts for cumulative fatigue across all 8 stations — expect it to feel harder than the same pace on a standalone run.</p>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   RENDER NUTRITION
+═══════════════════════════════════════════ */
+function renderNutrition(w,h,age,fitness,goal){
+  const n=getNutrition(w,h,age,gender,fitness,goal);
+  document.getElementById('nutritionSub').textContent=`${n.targetCals} kcal target · ${n.protG}g protein · ${n.carbG}g carbs · ${n.fatG}g fat`;
+  document.getElementById('macroGrid').innerHTML=`
+    <div class="macro-card cal"><div class="macro-val">${n.targetCals}</div><div class="macro-unit">kcal</div><div class="macro-lbl">Daily target</div></div>
+    <div class="macro-card carb"><div class="macro-val">${n.carbG}g</div><div class="macro-unit">Carbohydrates</div><div class="macro-lbl">Primary fuel</div></div>
+    <div class="macro-card prot"><div class="macro-val">${n.protG}g</div><div class="macro-unit">Protein</div><div class="macro-lbl">Muscle repair</div></div>
+    <div class="macro-card fat"><div class="macro-val">${n.fatG}g</div><div class="macro-unit">Healthy fats</div><div class="macro-lbl">Hormones & joints</div></div>
+  `;
+  document.getElementById('fuellingGrid').innerHTML=`
+    <div class="fuel-card"><h4><i class="ti ti-bolt"></i>Carb intake</h4><p>Target <strong>${n.carbsPerHr}g carbs per hour</strong> during the race. Practice this in every long training session — not for the first time on race day.</p></div>
+    <div class="fuel-card"><h4><i class="ti ti-coffee"></i>Caffeine</h4><p>Take <strong>${n.cafDose}mg caffeine</strong> (${Math.round(n.cafDose/200)} gels) ~45 minutes before the start. Only use caffeine you've trained with.</p></div>
+    <div class="fuel-card"><h4><i class="ti ti-salad"></i>Pre-race carb load</h4><p>Increase carbohydrate intake to <strong>${Math.round(n.carbG*1.4)}g/day</strong> for the 2 days before the race. Keep fibre low to avoid GI distress.</p></div>
+    <div class="fuel-card"><h4><i class="ti ti-meat"></i>Post-race recovery</h4><p>Within 30 minutes of finishing: <strong>${Math.round(w*.8)}g carbs + ${Math.round(w*.3)}g protein</strong>. Chocolate milk works well in a pinch.</p></div>
+  `;
+  const totalWater=Math.round(w*.035*1000);
+  const sweatLoss=Math.round(w*.015*1000);
+  document.getElementById('hydrationRow').innerHTML=`
+    <div class="hydro-badge"><i class="ti ti-droplet"></i>Daily: ${totalWater}ml water</div>
+    <div class="hydro-badge"><i class="ti ti-droplet-filled"></i>Training day: +${sweatLoss}ml extra</div>
+    <div class="hydro-badge"><i class="ti ti-droplet"></i>Race: 150–200ml every 15 min</div>
+    <div class="hydro-badge"><i class="ti ti-salt"></i>Add electrolytes when sweating >60 min</div>
+    <div class="hydro-badge"><i class="ti ti-moon"></i>Urine pale yellow = well hydrated</div>
+  `;
+  renderMeals(w,n.targetCals);
+}
+
+function renderMeals(w,cals){
+  const age=parseInt(document.getElementById('age').value)||40;
+  const fitness=document.getElementById('fitness').value;
+  if(!cals){const n=getNutrition(parseInt(document.getElementById('weight').value)||45,parseInt(document.getElementById('height').value)||155,age,gender,fitness,document.getElementById('goal').value);cals=n.targetCals;}
+  const wt=parseInt(document.getElementById('weight').value)||45;
+  const meals=getMeals(wt,gender,fitness,activeMealDay,cals);
+  document.getElementById('mealPlan').innerHTML=meals.map(m=>`
+    <div class="meal-item">
+      <div class="meal-time">${m.time}</div>
+      <div><div class="meal-name">${m.name}</div><div class="meal-detail">${m.detail}</div></div>
+      <div class="meal-cals">${m.cals}<span style="font-size:10px;color:var(--text3);font-family:'DM Sans',sans-serif;font-weight:400"> kcal</span></div>
+    </div>
+  `).join('');
+}
+
+/* ═══════════════════════════════════════════
+   RENDER TIPS
+═══════════════════════════════════════════ */
+function renderTips(w,h,age,fitness,sleds){
+  const tips=[
+    {icon:'ti-refresh',title:age>=40?'Recovery is training':'Consistency wins',body:age>=40?'After 40, adaptation happens during rest. Schedule a full deload week every 4th week — cut volume 40%, keep intensity. Skipping deloads leads to injury, not gains.':'Four to five consistent sessions per week beats occasional heroic efforts every time. Build the habit, then the volume.'},
+    {icon:'ti-barbell',title:'Sled-specific strength',body:`Your sled push is ${sleds.rPush}% of bodyweight. Heavy leg press, Bulgarian split squats, and loaded step-ups are weekly non-negotiables — not optional extras.`},
+    {icon:'ti-run',title:'Run into every station',body:'Every training session: finish a run before starting any station exercise. Never train stations cold. Your body must learn to execute under real cardiovascular load.'},
+    {icon:'ti-heart-rate-monitor',title:'Train the transitions',body:'The biggest Hyrox killer is the transition — heart rate spikes when you shift from running to stations. Practice this constantly in training so it becomes automatic.'},
+  ];
+  document.getElementById('tipsOut').innerHTML=`
+    <div class="tips-grid">${tips.map(t=>`<div class="tip-card"><i class="ti ${t.icon}"></i><h4>${t.title}</h4><p>${t.body}</p></div>`).join('')}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem">
+      <a href="https://www.hyrox.com" target="_blank" rel="noopener" class="btn-primary"><i class="ti ti-trophy"></i>Find a race</a>
+      <a href="https://www.concept2.com/ergs/skierg" target="_blank" rel="noopener" class="btn-secondary"><i class="ti ti-external-link"></i>SkiErg guide</a>
+      <a href="https://www.concept2.com/indoor-rowers" target="_blank" rel="noopener" class="btn-secondary"><i class="ti ti-external-link"></i>Rowing guide</a>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN UPDATE
+═══════════════════════════════════════════ */
+function update(){
+  const age=parseInt(document.getElementById('age').value)||40;
+  const h=parseInt(document.getElementById('height').value)||155;
+  const w=parseInt(document.getElementById('weight').value)||45;
+  const run5kStr=document.getElementById('run5k').value||'28:00';
+  const fitness=document.getElementById('fitness').value;
+  const goal=document.getElementById('goal').value;
+  const run5kMin=parse5k(run5kStr);
+  const bmi=getBMI(w,h);
+  const sleds=getSleds(w,gender);
+  const pz=getPaceZones(run5kMin,age);
+  const isMasters=age>=40;
+  cachedStations=getStations(w,gender,h);
+
+  let alerts='';
+  if(sleds.rPush>200)alerts+=`<div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>Your sled push is ${sleds.rPush}% of bodyweight — this is seriously hard at your weight. Prioritise 2+ weighted leg sessions weekly.</span></div>`;
+  if(isMasters)alerts+=`<div class="alert alert-info"><i class="ti ti-info-circle"></i><span>You qualify for the Masters 40+ category. Your plan includes built-in deload weeks suited to Masters recovery.</span></div>`;
+
+  document.getElementById('profileOut').innerHTML=`
+    <div class="profile-summary">
+      <div class="pstat hi"><div class="pstat-val">${isMasters?'Masters':'Open'}</div><div class="pstat-lbl">Category</div></div>
+      <div class="pstat"><div class="pstat-val">${bmi}</div><div class="pstat-lbl">BMI</div></div>
+      <div class="pstat"><div class="pstat-val">${sleds.rPush}%</div><div class="pstat-lbl">Sled push/BW</div></div>
+      <div class="pstat"><div class="pstat-val">${sleds.rPull}%</div><div class="pstat-lbl">Sled pull/BW</div></div>
+      <div class="pstat hi"><div class="pstat-val">${pz.race}</div><div class="pstat-lbl">Race pace/km</div></div>
+      <div class="pstat hi"><div class="pstat-val">${pz.total}</div><div class="pstat-lbl">Est. finish</div></div>
+    </div>
+    ${alerts}
+  `;
+
+  renderReadiness(w,h,age,run5kMin,fitness);
+  renderStations();
+  renderPlan();
+  renderPace(pz);
+  renderNutrition(w,h,age,fitness,goal);
+  renderTips(w,h,age,fitness,sleds);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+buildSessionRows();
+update();
+</script>
+</body>
+</html>
