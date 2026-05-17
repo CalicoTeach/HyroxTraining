@@ -290,6 +290,20 @@ footer span{color:var(--accent)}
   .day-picker{grid-template-columns:repeat(7,1fr)}
   .day-btn{font-size:9px;padding:8px 0}
 }
+/* ── RACE INSIGHT ── */
+.race-insight{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:1rem 1.25rem;margin-top:.5rem;}
+.race-insight-header{display:flex;align-items:center;gap:8px;margin-bottom:.6rem}
+.race-insight-header i{font-size:16px;color:var(--accent)}
+.race-insight-header span{font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:500;color:var(--accent)}
+.race-insight p{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:.5rem}
+.race-insight p:last-child{margin-bottom:0}
+.race-focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:.75rem}
+.race-focus-card{background:var(--surface);border:1px solid rgba(232,255,0,.15);border-radius:var(--radius-sm);padding:10px 12px}
+.race-focus-card .rfc-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:3px}
+.race-focus-card .rfc-val{font-size:13px;font-weight:500;color:var(--accent)}
+.prev-time-stat{display:inline-flex;align-items:center;gap:6px;background:rgba(232,255,0,.06);border:1px solid rgba(232,255,0,.15);border-radius:20px;padding:4px 14px;font-size:13px;color:var(--accent);margin-bottom:.75rem}
+.prev-time-stat i{font-size:14px}
+
 </style>
 </head>
 <body>
@@ -382,6 +396,60 @@ footer span{color:var(--accent)}
         </div>
       </div>
     </div>
+
+    <!-- RACE HISTORY -->
+    <div class="card" id="raceHistoryCard">
+      <div class="field-label" style="margin-bottom:12px">Have you raced Hyrox before?</div>
+      <div class="gen-btns" id="raceExpBtns">
+        <button class="gen-btn active" onclick="setRaceExp(false,this)">First timer</button>
+        <button class="gen-btn" onclick="setRaceExp(true,this)">Yes, I have</button>
+      </div>
+      <div id="raceHistoryFields" style="display:none">
+        <div class="profile-grid" style="margin-bottom:1rem">
+          <div class="field-wrap">
+            <span class="field-label">Finishing time</span>
+            <input type="text" id="prevTime" placeholder="e.g. 1:24:30" oninput="update()">
+          </div>
+          <div class="field-wrap">
+            <span class="field-label">Number of races</span>
+            <select id="numRaces" onchange="update()">
+              <option value="1">1 race</option>
+              <option value="2">2 races</option>
+              <option value="3plus">3 or more</option>
+            </select>
+          </div>
+          <div class="field-wrap">
+            <span class="field-label">Weakest station</span>
+            <select id="weakStation" onchange="update()">
+              <option value="">— select —</option>
+              <option value="skierg">SkiErg</option>
+              <option value="sledpush">Sled Push</option>
+              <option value="sledpull">Sled Pull</option>
+              <option value="burpee">Burpee Broad Jumps</option>
+              <option value="rowing">Rowing</option>
+              <option value="farmers">Farmers Carry</option>
+              <option value="lunges">Sandbag Lunges</option>
+              <option value="wallball">Wall Balls</option>
+            </select>
+          </div>
+          <div class="field-wrap">
+            <span class="field-label">What felt hardest?</span>
+            <select id="hardestPart" onchange="update()">
+              <option value="">— select —</option>
+              <option value="running">Running legs</option>
+              <option value="transitions">Transitions (run→station)</option>
+              <option value="grip">Grip / upper body fatigue</option>
+              <option value="legs">Leg fatigue / sled stations</option>
+              <option value="breathing">Breathing / aerobic capacity</option>
+              <option value="lategame">Last 3 stations</option>
+              <option value="pacing">Went out too fast</option>
+            </select>
+          </div>
+        </div>
+        <div id="raceInsight"></div>
+      </div>
+    </div>
+
     <div id="profileOut"></div>
   </section>
 
@@ -448,6 +516,7 @@ footer span{color:var(--accent)}
       <button class="ptab" onclick="setPhase('peak',this)">Peak — wk 9–12</button>
     </div>
     <div id="planOut"></div>
+    <div id="workoutDetail"></div>
   </section>
 
   <hr class="div">
@@ -540,6 +609,7 @@ let activeStation = 0;
 let activePhase = 'base';
 let activeMealDay = 'training';
 let cachedStations = [];
+let hasRacedBefore = false;
 
 // Session assignments: day -> type
 const dayKeys = ['mon','tue','wed','thu','fri','sat','sun'];
@@ -561,6 +631,100 @@ function getSleds(w,g){const sp=g==='female'?102:152,sl=g==='female'?78:103;retu
 function fmtPace(min){const m=Math.floor(min),s=Math.round((min-m)*60);return`${m}:${s.toString().padStart(2,'0')}`;}
 function difficulty(r){if(r>220)return{lbl:'Challenging',cls:'badge-hard'};if(r>170)return{lbl:'Moderate',cls:'badge-med'};return{lbl:'Manageable',cls:'badge-ok'};}
 function getActiveDays(){return dayKeys.filter(d=>document.getElementById('d-'+d)&&document.getElementById('d-'+d).checked);}
+
+function setRaceExp(raced, btn) {
+  hasRacedBefore = raced;
+  document.querySelectorAll('#raceExpBtns .gen-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('raceHistoryFields').style.display = raced ? 'block' : 'none';
+  update();
+}
+
+function parsePrevTime(str) {
+  // accepts h:mm:ss or mm:ss
+  if (!str) return null;
+  const parts = str.split(':').map(Number);
+  if (parts.length === 3) return parts[0] * 60 + parts[1] + parts[2] / 60;
+  if (parts.length === 2) return parts[0] + parts[1] / 60;
+  return null;
+}
+
+function renderRaceInsight() {
+  const el = document.getElementById('raceInsight');
+  if (!el) return;
+  if (!hasRacedBefore) { el.innerHTML = ''; return; }
+
+  const prevTimeStr = document.getElementById('prevTime').value;
+  const weakStation = document.getElementById('weakStation').value;
+  const hardestPart = document.getElementById('hardestPart').value;
+  const numRaces = document.getElementById('numRaces').value;
+  const prevMins = parsePrevTime(prevTimeStr);
+
+  // Station display names
+  const stationNames = {
+    skierg:'SkiErg', sledpush:'Sled Push', sledpull:'Sled Pull',
+    burpee:'Burpee Broad Jumps', rowing:'Rowing', farmers:'Farmers Carry',
+    lunges:'Sandbag Lunges', wallball:'Wall Balls'
+  };
+
+  // Hardest part descriptions
+  const hardMessages = {
+    running: 'Running legs were the limiter — your aerobic base needs the most work. Extra easy runs and tempo sessions are already prioritised.',
+    transitions: 'Transitions hurt you — the jump from running to stations is a skill. Every hybrid session now builds this directly.',
+    grip: 'Upper body and grip fatigue hit hard. Farmer carry practice, dead hangs, and rowing are weighted up in your plan.',
+    legs: 'Leg fatigue — especially at the sled stations — was your wall. Bulgarian split squats and heavy leg press are your new best friends.',
+    breathing: 'Aerobic capacity was the ceiling. Your base phase doubles down on easy running volume to raise that ceiling before adding intensity.',
+    lategame: 'The final 3 stations broke you down. Your hybrid sessions will end with wall balls and lunges so your body learns to finish strong.',
+    pacing: 'You went out too fast — a very common Hyrox mistake. Your race pace target has been set conservatively. Trust the plan.'
+  };
+
+  // Time improvement target
+  let timeHtml = '';
+  let targetHtml = '';
+  if (prevMins) {
+    const h = Math.floor(prevMins / 60), m = Math.round(prevMins % 60);
+    const prevFmt = `${h}:${m.toString().padStart(2,'0')}`;
+    // Suggest 5–8% improvement
+    const improvePct = numRaces === '3plus' ? 0.04 : numRaces === '2' ? 0.06 : 0.08;
+    const targetMins = prevMins * (1 - improvePct);
+    const th = Math.floor(targetMins / 60), tm = Math.round(targetMins % 60);
+    const targetFmt = `${th}:${tm.toString().padStart(2,'0')}`;
+    const savedSec = Math.round((prevMins - targetMins) * 60);
+
+    timeHtml = `<div class="prev-time-stat"><i class="ti ti-clock"></i>Previous best: ${prevFmt}</div>`;
+    targetHtml = `
+      <div class="race-focus-grid">
+        <div class="race-focus-card"><div class="rfc-label">Previous time</div><div class="rfc-val">${prevFmt}</div></div>
+        <div class="race-focus-card"><div class="rfc-label">Target this race</div><div class="rfc-val">${targetFmt}</div></div>
+        <div class="race-focus-card"><div class="rfc-label">Time to find</div><div class="rfc-val">${savedSec}s faster</div></div>
+        <div class="race-focus-card"><div class="rfc-label">Improvement</div><div class="rfc-val">${Math.round(improvePct*100)}%</div></div>
+      </div>`;
+  }
+
+  const weakHtml = weakStation
+    ? `<p>Your weakest station was <strong style="color:var(--accent)">${stationNames[weakStation]}</strong>. An extra targeted drill for this station has been woven into your hybrid sessions — you'll practise it while fatigued, which is exactly when it matters.</p>`
+    : '';
+
+  const hardHtml = hardestPart && hardMessages[hardestPart]
+    ? `<p>${hardMessages[hardestPart]}</p>`
+    : '';
+
+  const expNote = numRaces === '3plus'
+    ? '<p>With 3+ races under your belt, you know what race day feels like. This plan focuses on marginal gains — tightening pacing, improving your weak station, and arriving fresher on race day.</p>'
+    : numRaces === '2'
+    ? '<p>Two races in — you\'re past the learning curve. This plan builds on what you know and systematically closes the gaps.</p>'
+    : '<p>One race done — you\'ve already done something most people never will. Now we use what you learned to go faster.</p>';
+
+  el.innerHTML = `
+    <div class="race-insight">
+      <div class="race-insight-header"><i class="ti ti-trophy"></i><span>Race history — plan adjusted</span></div>
+      ${timeHtml}
+      ${expNote}
+      ${weakHtml}
+      ${hardHtml}
+      ${targetHtml}
+    </div>`;
+}
 
 /* ═══════════════════════════════════════════
    COUNTDOWN
@@ -995,6 +1159,13 @@ function update(){
   if(sleds.rPush>200)alerts+=`<div class="alert alert-warn"><i class="ti ti-alert-triangle"></i><span>Your sled push is ${sleds.rPush}% of bodyweight — this is seriously hard at your weight. Prioritise 2+ weighted leg sessions weekly.</span></div>`;
   if(isMasters)alerts+=`<div class="alert alert-info"><i class="ti ti-info-circle"></i><span>You qualify for the Masters 40+ category. Your plan includes built-in deload weeks suited to Masters recovery.</span></div>`;
 
+  // Previous time stat for summary
+  const prevMins = hasRacedBefore ? parsePrevTime((document.getElementById('prevTime')||{}).value) : null;
+  const prevTimeStat = prevMins ? (() => {
+    const h=Math.floor(prevMins/60), m=Math.round(prevMins%60);
+    return `<div class="pstat"><div class="pstat-val" style="font-size:20px">${h}:${m.toString().padStart(2,'0')}</div><div class="pstat-lbl">Previous best</div></div>`;
+  })() : '';
+
   document.getElementById('profileOut').innerHTML=`
     <div class="profile-summary">
       <div class="pstat hi"><div class="pstat-val">${isMasters?'Masters':'Open'}</div><div class="pstat-lbl">Category</div></div>
@@ -1003,6 +1174,7 @@ function update(){
       <div class="pstat"><div class="pstat-val">${sleds.rPull}%</div><div class="pstat-lbl">Sled pull/BW</div></div>
       <div class="pstat hi"><div class="pstat-val">${pz.race}</div><div class="pstat-lbl">Race pace/km</div></div>
       <div class="pstat hi"><div class="pstat-val">${pz.total}</div><div class="pstat-lbl">Est. finish</div></div>
+      ${prevTimeStat}
     </div>
     ${alerts}
   `;
@@ -1013,6 +1185,7 @@ function update(){
   renderPace(pz);
   renderNutrition(w,h,age,fitness,goal);
   renderTips(w,h,age,fitness,sleds);
+  renderRaceInsight();
 }
 
 /* ═══════════════════════════════════════════
