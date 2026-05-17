@@ -304,6 +304,33 @@ footer span{color:var(--accent)}
 .prev-time-stat{display:inline-flex;align-items:center;gap:6px;background:rgba(232,255,0,.06);border:1px solid rgba(232,255,0,.15);border-radius:20px;padding:4px 14px;font-size:13px;color:var(--accent);margin-bottom:.75rem}
 .prev-time-stat i{font-size:14px}
 
+/* ── WORKOUT DETAIL ── */
+.day-cell{cursor:pointer}
+.day-cell:hover{border-color:var(--border2);transform:translateY(-2px)}
+.day-cell.active-day{border-color:var(--accent)!important;background:rgba(232,255,0,.04)}
+.day-tap{font-size:8px;color:var(--accent);margin-top:2px;opacity:0;transition:opacity .2s}
+.day-cell:hover .day-tap,.day-cell.active-day .day-tap{opacity:1}
+.workout-panel{margin-top:1.25rem;animation:slideIn .3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.workout-panel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.workout-panel-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.03em}
+.workout-panel-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.wp-badge{font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--border2);color:var(--text2);background:var(--surface2);white-space:nowrap}
+.equip-toggle{display:flex;border:1px solid var(--border2);border-radius:6px;overflow:hidden}
+.equip-btn{padding:7px 16px;font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;background:transparent;color:var(--text2);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.equip-btn.active{background:var(--accent);color:#000}
+.block-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:500;margin-bottom:8px;margin-top:1rem;display:flex;align-items:center;gap:8px}
+.block-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.ex-list{display:flex;flex-direction:column;gap:6px}
+.ex-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.ex-row.key{border-color:rgba(232,255,0,.2);background:rgba(232,255,0,.025)}
+.ex-name{font-size:13px;font-weight:500;margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.key-tag{font-size:9px;color:var(--accent);border:1px solid rgba(232,255,0,.3);padding:1px 6px;border-radius:3px;letter-spacing:.06em;font-weight:500}
+.ex-cue{font-size:12px;color:var(--text2);line-height:1.5}
+.ex-spec{text-align:right;flex-shrink:0}
+.ex-sets{font-family:'Bebas Neue',sans-serif;font-size:19px;line-height:1;letter-spacing:.03em;white-space:nowrap}
+.ex-rest{font-size:10px;color:var(--text3);margin-top:2px;white-space:nowrap}
+.workout-note{background:var(--surface2);border-left:3px solid var(--accent2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:10px 14px;font-size:12px;color:var(--text2);line-height:1.6;margin-top:1rem}
 </style>
 </head>
 <body>
@@ -623,7 +650,6 @@ const sessionDurations = {mon:45,tue:45,wed:45,thu:45,fri:60,sat:75,sun:60};
    HELPERS
 ═══════════════════════════════════════════ */
 function setGender(g,btn){gender=g;document.querySelectorAll('.gen-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');update();}
-function setPhase(p,btn){activePhase=p;document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPlan();}
 function setMealDay(d,btn){activeMealDay=d;document.querySelectorAll('.meal-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderMeals();}
 function parse5k(str){const p=(str||'28:00').split(':');if(p.length===2)return(parseInt(p[0])||0)+(parseInt(p[1])||0)/60;return parseFloat(str)||28;}
 function getBMI(w,h){return(w/((h/100)**2)).toFixed(1);}
@@ -938,6 +964,225 @@ function getMeals(w,g,fitness,dayType,cals){
 }
 
 /* ═══════════════════════════════════════════
+   WORKOUT LIBRARY
+═══════════════════════════════════════════ */
+let activeWorkoutDay = null;
+let equipMode = 'gym';
+let cachedPlanCells = [];
+
+// e(name, cue, spec, rest, isKey)
+function e(name,cue,spec,rest,key=false){return{name,cue,spec,rest,key};}
+
+const WORKOUTS = {
+  run:{
+    base:{
+      gym:{
+        warmup:[e('Dynamic leg swings','10 forward + 10 lateral each leg — hold wall for balance','2×10','—'),e('High knees','Drive knees to waist height, arms pumping','30 sec','—')],
+        main:[e('Easy aerobic run','Conversational pace — you should speak in full sentences. Treadmill or outdoor.','25–35 min','—',true),e('Treadmill hill intervals (optional)','Incline 4–6%, alternate 3 min walk / 2 min jog','4 rounds','90 sec')],
+        cooldown:[e('Walk','Bring HR below 120 bpm','5 min','—'),e('Calf & quad stretch','30 sec hold each side','2×30 sec','—')],
+        note:'Base running: keep effort genuinely easy. If you can\'t hold a conversation, slow down. This builds the aerobic engine you\'ll need for 8 km at race pace.'
+      },
+      bodyweight:{
+        warmup:[e('Leg swings','Hold a wall, 10 forward + 10 lateral each leg','2×10','—'),e('Ankle circles','Seated, 10 rotations each direction','10 each','—')],
+        main:[e('Easy outdoor run','Flat route, conversational pace throughout','25–35 min','—',true),e('Stair intervals (optional add-on)','Walk up 5 flights, jog down — use a building or stadium','5 rounds','60 sec')],
+        cooldown:[e('Walk','Cool down gradually','5 min','—'),e('Standing quad & calf stretch','Hold 30 sec each leg','30 sec each','—')],
+        note:'No gym needed. A park loop at easy effort is perfect base training. Focus on time on feet, not speed or distance.'
+      }
+    },
+    build:{
+      gym:{
+        warmup:[e('Easy treadmill jog','Warm up at conversational pace','8 min','—'),e('Leg swings + hip circles','10 each direction — full hip ROM','2×10','—')],
+        main:[e('Tempo run','Comfortably hard — can say 3–4 words, not sentences. Use your tempo pace zone.','20 min','—',true),e('Race pace 1 km intervals','Run at your exact target race pace. Full recovery between reps.','4×1 km','2 min',true),e('Easy cooldown jog','Bring HR down steadily','5 min','—')],
+        cooldown:[e('Hamstring & hip flexor stretch','Hold each 30–40 sec','3×30 sec','—')],
+        note:'Tempo run first, then intervals — always in that order. If the intervals feel impossible, reduce to 3 reps and extend recovery to 3 min.'
+      },
+      bodyweight:{
+        warmup:[e('Jogging on the spot + arm circles','Gradually increase pace over 3 min','3 min','—'),e('Hip circles','Hands on hips, 10 each direction','10 each','—')],
+        main:[e('Outdoor tempo run','Hard but sustainable effort — comfortably uncomfortable','20 min','—',true),e('Fartlek intervals','Sprint 30 sec → easy jog 90 sec, repeat. No watch needed — feel the effort.','8 rounds','—',true)],
+        cooldown:[e('Walk & stretch','Quad, hamstring, calf — 30 sec each side','5 min','—')],
+        note:'Fartlek = Swedish for "speed play". Push hard for 30 sec then recover. Great for building speed without needing a track or GPS.'
+      }
+    },
+    peak:{
+      gym:{
+        warmup:[e('Easy jog','Loosen up at comfortable pace','10 min','—'),e('4×100 m strides','Build to 90% effort, then decelerate — not full sprints','4×100 m','90 sec')],
+        main:[e('Race pace run','Exactly at your target race pace — this is your sharpener session','5–6 km','—',true),e('Faster-than-race-pace intervals','5–10 sec/km faster than race pace. Full recovery.','2×1 km','3 min',true)],
+        cooldown:[e('Easy jog + full body stretch','Priority: calves, quads, hips','10 min','—')],
+        note:'Peak phase: volume drops, quality rises. Run the race pace sets feeling controlled — no heroics. Save legs for race day.'
+      },
+      bodyweight:{
+        warmup:[e('Easy jog','10 min to warm up','10 min','—'),e('Leg swings + high knees','Activate glutes and hip flexors','2 min','—')],
+        main:[e('Race pace outdoor run','Know your pace — hit it and hold it','5 km','—',true),e('Hill sprints','Sprint uphill 8 sec, walk back down — explosive effort only','6 reps','Full recovery')],
+        cooldown:[e('Walk + full body stretch','Focus on calves, quads, hips — hold 40 sec each','10 min','—')],
+        note:'If you can\'t find your exact race pace outside, aim for "strong but controlled" — you should feel like you could sustain it for 8 km.'
+      }
+    }
+  },
+  strength:{
+    base:{
+      gym:{
+        warmup:[e('Leg press (light)','Full ROM, slow 3-sec descent — activation only','2×15','—'),e('Glute bridge','Squeeze hard at top, 2-sec hold','2×15','—'),e('Banded clamshells','Keep hips stacked — slow and controlled','2×15 each','—')],
+        main:[e('Leg press','Full ROM, controlled 3-sec descent — go heavy but controlled','4×10','90 sec',true),e('Romanian deadlift','Hinge at hips, bar close to legs, feel the hamstring stretch','3×10','90 sec',true),e('Bulgarian split squat','Rear foot elevated, front knee tracks over toes','3×8 each','90 sec',true),e('Seated cable row','Elbows close to body, full retraction at the end','3×12','60 sec'),e('Farmer carry','Walk 30 m, tall posture, resist shoulder drop','3×30 m','60 sec')],
+        cooldown:[e('Hip flexor stretch','Low lunge, push hips forward gently','2×30 sec each','—'),e('Hamstring stretch','Seated toe touch or lying single leg pull','2×30 sec each','—')],
+        note:'Base strength: prioritise form over load. Every leg press rep is direct sled push preparation — the movement patterns are almost identical.'
+      },
+      bodyweight:{
+        warmup:[e('Glute bridge','Feet flat, drive hips up, squeeze at top','2×15','—'),e('Leg swings','10 forward + 10 lateral each leg','2×10','—')],
+        main:[e('Bulgarian split squat','Rear foot on chair, 3-sec descent — go slow','4×10 each','90 sec',true),e('Single-leg glute bridge','One leg raised, drive through heel — full extension','3×12 each','60 sec',true),e('Pike push-up','Start in downward dog position, lower head toward floor','3×10','60 sec'),e('Reverse lunge with pause','3-sec hold at bottom, knee just off floor','3×10 each','60 sec',true),e('Dead hang','Hang from bar or door frame — build grip endurance','3×20 sec','60 sec')],
+        cooldown:[e('Hip flexor & quad stretch','Low lunge + quad pull per side','2×30 sec each','—'),e('Pigeon pose or figure-4','Hold 45 sec each side','45 sec each','—')],
+        note:'A sturdy chair for split squats is all you need. These movements directly train the muscles used in the sled, lunges, and farmers carry.'
+      }
+    },
+    build:{
+      gym:{
+        warmup:[e('Foam roll quads & IT band','10 slow passes each side','2 min','—'),e('Light goblet squat','Slow tempo, bodyweight','2×12','—')],
+        main:[e('Back squat or goblet squat','Drive through heels, chest up — increase load from base phase','4×6','2 min',true),e('Heavy leg press (sled simulation)','Load 1.5–2× bodyweight — short explosive pushes, 3-sec hold at extension','4×6','2 min',true),e('Single-leg RDL','Control the descent — feel the full hamstring load','3×10 each','90 sec',true),e('Pull-up or lat pulldown','Full range — dead hang to chin over bar','3×8','90 sec'),e('Loaded carry (sandbag or barbell)','Carry 20 m, switch sides, return — core stays braced','3×20 m','60 sec')],
+        cooldown:[e('Hip flexor & thoracic stretch','Low lunge + reach; thoracic rotation on foam roller','3 min','—')],
+        note:'Build phase: load increases significantly. The heavy leg press at 1.5× bodyweight simulates the sled push pattern — drive hard from the hips.'
+      },
+      bodyweight:{
+        warmup:[e('Jumping jacks','Easy pace to raise heart rate','2 min','—'),e('Hip circle + leg swing combo','10 each direction per leg','2×10','—')],
+        main:[e('Jump squat','Explosive take-off, soft full-squat landing — absorb the force','4×8','90 sec',true),e('Walking lunge with torso twist','At bottom, rotate toward front knee — 10 each side','3×10 each','60 sec',true),e('Single-leg hip thrust','Shoulders on sofa/bench, one leg raised — full hip extension','3×12 each','60 sec',true),e('Pike push-up','Targets shoulders and upper back','3×10','60 sec'),e('Plank with shoulder tap','Keep hips still — tap opposite shoulder × 20','3×20 taps','45 sec')],
+        cooldown:[e('Full body stretch sequence','Hip flexors, hamstrings, quads, lats — 30 sec each','5 min','—')],
+        note:'Jump squats build the explosive leg drive needed for the sled push and wall balls. Land softly — quality over speed on every single rep.'
+      }
+    },
+    peak:{
+      gym:{
+        warmup:[e('Light leg press + banded walks','Activate glutes before heavier work','2×12 each','—')],
+        main:[e('Leg press (moderate load)','70% of your build phase max — activation, not exhaustion','3×8','90 sec',true),e('Romanian deadlift','Crisp and controlled — maintain the movement pattern','3×6','90 sec',true),e('Kettlebell swing','Hip hinge power — explosive drive through hips','3×10','60 sec'),e('Farmer carry','Heavy, 20 m — grip and posture focus','3×20 m','60 sec'),e('Wall balls (race weight)','Full squat to throw — hit the target every rep','3×15','60 sec')],
+        cooldown:[e('Full stretch + foam roll','Focus on legs and upper back','5 min','—')],
+        note:'Peak strength: low volume, high quality. Finish feeling fresh — save the energy for race-specific work. This session is maintenance, not building.'
+      },
+      bodyweight:{
+        warmup:[e('Glute bridge + clamshell','Activate glutes and hips before moving','2×12 each','—')],
+        main:[e('Explosive reverse lunge','Drive through front heel to stand fast — snap at top','3×8 each','90 sec',true),e('Single-leg glute bridge','Slow down, fast up — feel the posterior chain fire','3×12 each','60 sec',true),e('Controlled burpee','Perfect form — chest to floor, strong jump at top','3×8','60 sec'),e('Plank hold','Squeeze glutes, core, and lats — everything on','3×45 sec','45 sec')],
+        cooldown:[e('Hip flexor, quad & hamstring stretch','Hold each 40 sec, both sides','5 min','—')],
+        note:'Keep intensity up but volume low. Your legs need to be sharp for hybrid sessions — don\'t accumulate unnecessary fatigue here.'
+      }
+    }
+  },
+  hybrid:{
+    base:{
+      gym:{
+        warmup:[e('Easy jog','Get heart rate up gently','5 min','—'),e('Dynamic warm-up','Leg swings, hip circles, high knees, arm circles','2 min','—')],
+        main:[e('Run 1 km easy','Treadmill or outdoor — conversational effort','1 km','—',true),e('SkiErg or rowing × 500 m','Moderate pace — practise breathing rhythm at the station','500 m','2 min',true),e('Run 1 km easy','Same easy effort — don\'t rush back','1 km','—'),e('Farmers carry','Pick up kettlebells, walk 40 m × 3 — tall posture throughout','3×40 m','90 sec',true),e('Run 500 m easy','Finish with a jog — arrive at each station feeling it','500 m','—')],
+        cooldown:[e('5 min walk + stretch','Quads, hip flexors, calves — hold 30 sec each','5 min','—')],
+        note:'The rule of Hyrox training: always run INTO a station, never start fresh. This is the most important habit to build in the base phase.'
+      },
+      bodyweight:{
+        warmup:[e('Easy jog or jog on the spot','3 min gentle warm-up','3 min','—'),e('Arm circles + hip swings','Loosen upper and lower body','1 min','—')],
+        main:[e('Run 1 km easy (outdoor)','Easy, conversational pace','1 km','—',true),e('Burpees × 10','Chest to floor, controlled jump at top — no rushing','10 reps','90 sec',true),e('Run 800 m easy','Keep easy effort — don\'t sprint after rest','800 m','—'),e('Walking lunges × 20','Slow, full knee to floor — quality reps','20 reps','90 sec',true),e('Run 500 m easy','Finish strong — practise running on tired legs','500 m','—')],
+        cooldown:[e('Walk + full body stretch','Focus on legs and lower back','5 min','—')],
+        note:'This is your race in miniature. The run-to-exercise transition is the hardest skill in Hyrox — drill it every single session.'
+      }
+    },
+    build:{
+      gym:{
+        warmup:[e('Easy jog','Build to moderate effort over 10 min','10 min','—'),e('Dynamic warm-up circuit','Leg swings, hip circles, arm swings × 10 each','2 min','—')],
+        main:[e('Run 1 km at race pace','First km at your target race pace — find the rhythm','1 km','—',true),e('SkiErg 500 m at race effort','Practise breathing rhythm — not all-out, not easy','500 m','90 sec',true),e('Run 1 km at race pace','Hold the pace — don\'t let it slip after the station','1 km','—',true),e('Leg press (sled simulation) 1.5× BW','6 explosive reps — full extension on each','3×6','2 min',true),e('Run 1 km at race pace','Third km — hold the pace, this is where it gets hard','1 km','—'),e('Farmer carry','Heavy, 40 m, tall posture — grip it out','2×40 m','90 sec'),e('Run 500 m easy cooldown','Wind down gradually','500 m','—')],
+        cooldown:[e('5 min walk','Bring heart rate down below 120','5 min','—'),e('Full stretch','Quads, hips, calves, shoulders — 30 sec each','5 min','—')],
+        note:'Build hybrid: this is mini race simulation. The 1 km runs must be at race pace — that\'s the entire point. Legs should feel genuinely tired by km 3.'
+      },
+      bodyweight:{
+        warmup:[e('10 min easy outdoor run','Gradual build to a comfortable effort','10 min','—')],
+        main:[e('Run 1 km at race pace','At your target pace — outdoors','1 km','—',true),e('Burpee broad jumps × 15 m','Full burpee → explosive broad jump forward, cover 15 m','15 m','90 sec',true),e('Run 1 km at race pace','Maintain pace despite station fatigue','1 km','—',true),e('Reverse lunge with knee drive × 12 each','At bottom of lunge, drive knee up explosively to stand','12 each','90 sec',true),e('Run 1 km at race pace','Final km — earn every step','1 km','—'),e('Squat jumps × 10','Explosive, land softly in a full squat','10 reps','90 sec')],
+        cooldown:[e('Easy jog + stretch','5 min walk, then quad and hip stretch','8 min','—')],
+        note:'The burpee broad jumps directly train Hyrox station 4. Every time you re-enter a run after a station, hit race pace — no excuses, no easing in.'
+      }
+    },
+    peak:{
+      gym:{
+        warmup:[e('10 min easy jog + dynamic warm-up','Thorough warm-up before a hard session','12 min','—')],
+        main:[e('Run 1 km race pace','1st km — find your rhythm and settle in','1 km','—',true),e('SkiErg 1,000 m race effort','Full station distance at race intensity — no shortcuts','1,000 m','2 min',true),e('Run 1 km race pace','2nd km — hold pace after SkiErg','1 km','—',true),e('Leg press sled sim (heavy)','Race-day sled load ratio — 4 explosive sets, full extension','4×6','2 min',true),e('Run 1 km race pace','3rd km — this is where races are won or lost','1 km','—'),e('Farmers carry (race load)','2×16 kg (F) or 2×24 kg (M), 40 m — tall posture','2×40 m','90 sec'),e('Run 1 km race pace','4th km — dig deep','1 km','—'),e('Wall balls × 20 (race weight)','Full depth squat, hit the target every single rep','20 reps','—')],
+        cooldown:[e('Easy jog 5 min + full stretch','Hip flexors, quads, shoulders — priority areas','10 min','—')],
+        note:'This is as close to race day as training gets. If this feels manageable, you\'re ready. If it feels hard, race day adrenaline will carry you the rest of the way.'
+      },
+      bodyweight:{
+        warmup:[e('10 min easy run + dynamic circuit','Full warm-up is non-negotiable before peak sessions','12 min','—')],
+        main:[e('Run 1 km race pace','1st km — controlled, strong start','1 km','—',true),e('Burpee broad jumps × 20 m','Station 4 simulation — full burpee + explosive jump','20 m','90 sec',true),e('Run 1 km race pace','2nd km — don\'t let pace slip','1 km','—',true),e('Walking lunges × 30 m','Slow and perfect — this simulates the sandbag lunges','30 m','90 sec',true),e('Run 1 km race pace','3rd km','1 km','—'),e('Squat jumps × 15','Wall ball simulation — explosive, full range every rep','15 reps','90 sec'),e('Run 1 km race pace','Final km — negative split if you have it in you','1 km','—')],
+        cooldown:[e('Walk + full body stretch','Hold each stretch 40 sec — you earned it','10 min','—')],
+        note:'Four km at race pace with bodyweight stations between each. By race day, doing this with actual equipment will feel familiar — even easier.'
+      }
+    }
+  },
+  rest:{
+    base:{
+      gym:{warmup:[],main:[e('Rest or active recovery','Light 20–30 min walk, gentle yoga, or foam rolling. No structured training.','20–30 min','—')],cooldown:[],note:'Rest days are where adaptation happens. Missing rest is like skipping training.'},
+      bodyweight:{warmup:[],main:[e('Active recovery walk or stretch','Easy movement only — 20 min walk or full body mobility flow','20–30 min','—')],cooldown:[],note:'Rest days are where adaptation happens. Missing rest is like skipping training.'}
+    },
+    build:{
+      gym:{warmup:[],main:[e('Rest or light mobility','Foam roll, stretch, or 20 min easy walk. Keep HR below 50% max.','—','—')],cooldown:[],note:'In the build phase, rest days become even more important as training volume rises.'},
+      bodyweight:{warmup:[],main:[e('Mobility & foam rolling','Full body foam roll (5 min) then hold major stretches 45 sec each','20 min','—')],cooldown:[],note:'In the build phase, rest days become even more important as training volume rises.'}
+    },
+    peak:{
+      gym:{warmup:[],main:[e('Full rest','No activity. Sleep well, hydrate properly, eat your macros. Trust the taper.','—','—')],cooldown:[],note:'Peak rest days: prioritise sleep and nutrition above everything. The work is done.'},
+      bodyweight:{warmup:[],main:[e('Full rest','No activity. Sleep, eat, hydrate. Let the adaptations consolidate.','—','—')],cooldown:[],note:'Peak rest days: prioritise sleep and nutrition above everything. The work is done.'}
+    }
+  }
+};
+
+function setEquip(mode){
+  equipMode=mode;
+  if(activeWorkoutDay!==null) showWorkout(activeWorkoutDay);
+}
+
+function showWorkout(dayIndex){
+  activeWorkoutDay=dayIndex;
+  // highlight active day cell
+  document.querySelectorAll('.day-cell').forEach((el,i)=>el.classList.toggle('active-day',i===dayIndex));
+
+  const cell=cachedPlanCells[dayIndex];
+  const type=cell.active?(sessionAssignments[cell.dayKey]||'run'):'rest';
+  const wData=(WORKOUTS[type]?.[activePhase]?.[equipMode])||WORKOUTS.rest.base.gym;
+  const dur=cell.dur?`${cell.dur} min`:'—';
+
+  const typeColor={run:'var(--accent)',strength:'#FF8C42',hybrid:'#5DCAA5',rest:'var(--text3)'};
+  const col=typeColor[type]||'var(--text2)';
+
+  function renderBlock(label,list){
+    if(!list||!list.length)return'';
+    return`<div class="block-label">${label}</div>
+    <div class="ex-list">${list.map(ex=>`
+      <div class="ex-row${ex.key?' key':''}">
+        <div>
+          <div class="ex-name">${ex.name}${ex.key?'<span class="key-tag">Key</span>':''}</div>
+          <div class="ex-cue">${ex.cue}</div>
+        </div>
+        <div class="ex-spec">
+          <div class="ex-sets" style="color:${col}">${ex.spec}</div>
+          ${ex.rest&&ex.rest!=='—'?`<div class="ex-rest">Rest ${ex.rest}</div>`:''}
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  const dayNamesFull=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+  document.getElementById('workoutDetail').innerHTML=`
+    <div class="workout-panel">
+      <div class="workout-panel-header">
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);margin-bottom:4px">${dayNamesFull[dayIndex]} · ${activePhase.charAt(0).toUpperCase()+activePhase.slice(1)} phase</div>
+          <div class="workout-panel-title" style="color:${col}">${cell.label} Session</div>
+        </div>
+        <div class="workout-panel-meta">
+          <div class="wp-badge"><i class="ti ti-clock" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>${dur}</div>
+          <div class="equip-toggle">
+            <button class="equip-btn${equipMode==='gym'?' active':''}" onclick="setEquip('gym')"><i class="ti ti-barbell" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Gym</button>
+            <button class="equip-btn${equipMode==='bodyweight'?' active':''}" onclick="setEquip('bodyweight')"><i class="ti ti-walk" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>Bodyweight</button>
+          </div>
+        </div>
+      </div>
+      ${renderBlock('Warm-up',wData.warmup)}
+      ${renderBlock('Main workout',wData.main)}
+      ${renderBlock('Cool-down',wData.cooldown)}
+      ${wData.note?`<div class="workout-note"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:5px;color:var(--accent2)"></i>${wData.note}</div>`:''}
+    </div>`;
+
+  setTimeout(()=>document.getElementById('workoutDetail').scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+}
+
+/* ═══════════════════════════════════════════
    WEEK PLAN — SCHEDULE AWARE
 ═══════════════════════════════════════════ */
 const phaseDesc={
@@ -946,48 +1191,42 @@ const phaseDesc={
   peak:'Sharpen fitness and practice race pace. Volume drops, quality and specificity rise.'
 };
 
+function setPhase(p,btn){
+  activePhase=p;
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  activeWorkoutDay=null;
+  renderPlan();
+}
+
 function renderPlan(){
   const fitness=document.getElementById('fitness').value;
   const age=parseInt(document.getElementById('age').value)||40;
   const activeDays=getActiveDays();
 
-  // Build 7-day display from user schedule
-  const planCells=dayKeys.map(d=>{
+  cachedPlanCells=dayKeys.map((d,i)=>{
     const isActive=activeDays.includes(d);
-    if(!isActive)return{type:'rest',label:'Rest',dur:null,active:false};
+    if(!isActive)return{type:'rest',label:'Rest',dur:null,active:false,dayKey:d};
     const type=sessionAssignments[d]||'run';
     const dur=sessionDurations[d]||45;
-    // Adjust label by phase
     let label=sessionLabels[type];
-    if(type==='run'){
-      if(activePhase==='base')label=dur>=60?'Long run':'Easy run';
-      else if(activePhase==='build')label=dur>=60?'Tempo/intervals':'Easy run';
-      else label=dur>=60?'Race pace':'Strides';
-    }
-    if(type==='strength'){
-      if(activePhase==='base')label='Lower body';
-      else if(activePhase==='build')label='Full body';
-      else label='Activation';
-    }
-    if(type==='hybrid'){
-      if(activePhase==='base')label='Stations + run';
-      else if(activePhase==='build')label='Race sim';
-      else label='Full race sim';
-    }
-    return{type,label,dur,active:true};
+    if(type==='run'){label=activePhase==='base'?(dur>=60?'Long run':'Easy run'):activePhase==='build'?(dur>=60?'Tempo/Intervals':'Easy run'):(dur>=60?'Race pace':'Strides');}
+    if(type==='strength'){label=activePhase==='base'?'Lower body':activePhase==='build'?'Full body':'Activation';}
+    if(type==='hybrid'){label=activePhase==='base'?'Stations + run':activePhase==='build'?'Race sim':'Full race sim';}
+    return{type,label,dur,active:true,dayKey:d};
   });
 
   document.getElementById('planSub').textContent=phaseDesc[activePhase];
   document.getElementById('planOut').innerHTML=`
     <div class="week-grid">
-      ${planCells.map((d,i)=>`
-        <div class="day-cell">
+      ${cachedPlanCells.map((d,i)=>`
+        <div class="day-cell${activeWorkoutDay===i?' active-day':''}" onclick="showWorkout(${i})">
           <div class="day-lbl">${dayNames[i]}</div>
           <div class="day-dot ${d.type}"></div>
           <div class="day-type">${d.label}</div>
           ${d.dur?`<div class="day-dur">${d.dur}m</div>`:''}
-        </div>
-      `).join('')}
+          <div class="day-tap">View ↓</div>
+        </div>`).join('')}
     </div>
     <div class="legend">
       <span><span class="legend-dot" style="background:var(--accent)"></span>Running</span>
@@ -995,8 +1234,11 @@ function renderPlan(){
       <span><span class="legend-dot" style="background:#3B9D11"></span>Hybrid</span>
       <span><span class="legend-dot" style="background:var(--surface3)"></span>Rest</span>
     </div>
-    ${age>=40?`<p style="font-size:12px;color:var(--text3);margin-top:8px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Masters 40+ plan: schedule a full deload week (40% volume cut) every 4th week — your body adapts during rest, not just during training.</p>`:''}
+    <p style="font-size:12px;color:var(--text2);margin-top:10px;font-style:italic">↑ Tap any day to see the full workout</p>
+    ${age>=40?`<p style="font-size:12px;color:var(--text3);margin-top:6px"><i class="ti ti-info-circle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Masters 40+ plan: schedule a full deload week (40% volume cut) every 4th week — your body adapts during rest, not just during training.</p>`:''}
   `;
+
+  if(activeWorkoutDay!==null) showWorkout(activeWorkoutDay);
 }
 
 /* ═══════════════════════════════════════════
